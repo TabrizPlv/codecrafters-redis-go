@@ -28,7 +28,12 @@ func handleConnection(conn net.Conn) {
 	defer conn.Close()
 	for {
 		var response string = "+PONG\r\n"
-		_, err := conn.Write([]byte(response))
+		buffer := make([]byte, 1024)
+		data, err := conn.Read(buffer)
+		if err != nil {
+			fmt.Println("Error reading command: ", err.Error())
+		}
+		_, err = conn.Write([]byte(response))
 		if err != nil {
 			fmt.Println("Error sending response:", err.Error())
 			return
