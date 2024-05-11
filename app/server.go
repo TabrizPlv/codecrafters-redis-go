@@ -22,11 +22,10 @@ func main() {
 	for {
 		go handleConnection(conn)
 	}
+	conn.Close()
 }
 
 func handleConnection(conn net.Conn) {
-	defer conn.Close()
-
 	var response string = "+PONG\r\n"
 	_, err := conn.Write([]byte(response))
 	if err != nil {
