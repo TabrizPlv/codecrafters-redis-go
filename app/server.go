@@ -29,7 +29,7 @@ func handleConnection(conn net.Conn) {
 	for {
 		var response string = "+PONG\r\n"
 		buffer := make([]byte, 1024)
-		data, err := conn.Read(buffer)
+		_, err := conn.Read(buffer)
 		if err != nil {
 			fmt.Println("Error reading command: ", err.Error())
 		}
