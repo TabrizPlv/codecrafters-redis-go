@@ -26,12 +26,13 @@ func main() {
 
 func handleConnection(conn net.Conn) {
 	defer conn.Close()
-
-	var response string = "+PONG\r\n"
-	_, err := conn.Write([]byte(response))
-	if err != nil {
-		fmt.Println("Error sending response:", err.Error())
-		return
+	for {
+		var response string = "+PONG\r\n"
+		_, err := conn.Write([]byte(response))
+		if err != nil {
+			fmt.Println("Error sending response:", err.Error())
+			return
+		}
+		fmt.Println("Response sent to client: ", response)
 	}
-	fmt.Println("Response sent to client: ", response)
 }
