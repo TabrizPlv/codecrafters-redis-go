@@ -19,4 +19,24 @@ func main() {
 		fmt.Println("Error accepting connection: ", err.Error())
 		os.Exit(1)
 	}
+	for {
+		conn, err := l.Accept()
+		if err != nil {
+			fmt.Println("Error accepting connection: ", err.Error())
+			continue
+		}
+		go handleConnection(conn)
+	}
+}
+
+func handleConnection(conn net.Conn) {
+	defer conn.Close()
+
+	var response string = "+PONG\r\n"
+	_, err := conn.Write([]byte(response))
+	if err != nil {
+		fmt.Println("Error sending response:", err.Error())
+		return
+	}
+	fmt.Println("Response sent to client: ", response)
 }
