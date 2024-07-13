@@ -27,17 +27,24 @@ func main() {
 func handleConnection(conn net.Conn) {
 	defer conn.Close()
 	for {
-		var response string = "+PONG\r\n"
-		buffer := make([]byte, 1024)
-		_, err := conn.Read(buffer)
+		resp := NewResp(conn)
+		writer := NewWriter(conn)
+		value, err := resp.read()
 		if err != nil {
-			fmt.Println("Error reading command: ", err.Error())
-		}
-		_, err = conn.Write([]byte(response))
-		if err != nil {
-			fmt.Println("Error sending response:", err.Error())
+			fmt.Println(err)
 			return
 		}
-		fmt.Println("Response sent to client: ", response)
+		if value.typ != "array" {
+			fmt.Println("Invalid request, expected array")
+			continue
+		}
+		if len(value.array) == 0 {
+			fmt.Println("Invalid request, expected array length > 0")
+			continue
+		}
+		command := value.array[0].bulk
+		args := value.array[1:]
+		response := Handlers[command](args)
+		writer.Write(response)
 	}
 }
