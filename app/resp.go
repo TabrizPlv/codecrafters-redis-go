@@ -13,7 +13,6 @@ const (
 	INTEGER = ':'
 	BULK    = '$'
 	ARRAY   = '*'
-	NULL    = '_'
 )
 
 type Resp struct {
@@ -173,10 +172,7 @@ func (value Value) marshalArray() []byte {
 }
 
 func (value Value) marshalNull() []byte {
-	var bytes []byte
-	bytes = append(bytes, NULL)
-	bytes = append(bytes, '\r', '\n')
-	return bytes
+	return []byte("$-1\r\n")
 }
 
 func (value Value) marshalError() []byte {
