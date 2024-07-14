@@ -12,6 +12,7 @@ var Handlers = map[string]func([]Value) Value{
 	"SET":  set,
 	"GET":  get,
 	"ECHO": echo,
+	"INFO": info,
 }
 var SETs = map[string]string{}
 var SETEXPIRYs = map[string]time.Time{}
@@ -75,4 +76,15 @@ func echo(args []Value) Value {
 	}
 	value := args[0].bulk
 	return Value{typ: "bulk", bulk: value}
+}
+
+func info(args []Value) Value {
+	if len(args) != 1 {
+		return Value{typ: "error", str: "ERR wrong number of arguments for 'info' command"}
+	}
+	section := args[1].bulk
+	if strings.ToLower(section) != "replication" {
+		return Value{typ: "error", str: "No such section for INFO command, section provided: " + section}
+	}
+	return Value{typ: "bulk", bulk: "role:master"}
 }
