@@ -82,7 +82,7 @@ func info(args []Value) Value {
 	if len(args) != 1 {
 		return Value{typ: "error", str: "ERR wrong number of arguments for 'info' command"}
 	}
-	section := args[1].bulk
+	section := args[0].bulk
 	if strings.ToLower(section) != "replication" {
 		return Value{typ: "error", str: "No such section for INFO command, section provided: " + section}
 	}
