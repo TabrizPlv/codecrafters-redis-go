@@ -12,15 +12,15 @@ import (
 func main() {
 	fmt.Println("Logs from your program will appear here!")
 
-	port := flag.Int("port", 6379, "Port to run the server on")
+	port := flag.String("port", "6379", "Port to run the server on")
 
 	flag.Parse()
 
-	address := "0.0.0.0:" + strconv.Itoa(*port)
+	address := "0.0.0.0:" + *port
 
 	l, err := net.Listen("tcp", address)
 	if err != nil {
-		fmt.Println("Failed to bind to port 6379")
+		fmt.Println("Failed to bind to port " + *port)
 		os.Exit(1)
 	}
 	for {
